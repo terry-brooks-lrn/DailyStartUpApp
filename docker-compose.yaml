@@ -1,0 +1,68 @@
+---
+version: "3"
+
+services:
+  redis:
+    image: redis:latest
+    container_name: standup_cache_database
+    restart: unless-stopped
+    networks:
+      - standup-network
+    working_dir: /data/cache
+    volumes:
+      - 'primary_hhd_standup:/data/cache'
+    ports:
+      - '9051:6379'
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      interval: 5m
+      timeout: 2m
+      retries: 5
+      start_period: 2m
+      start_interval: 2m
+
+  db:
+    image: postgres:latest
+    container_name: stansup_app_database
+    restart: unless-stopped
+    networks:
+      - standup-network
+    environment:
+      - POSTGRES_PASSWORD=StandUpDEV
+      - POSTGRES_USER=app_user
+      - POSTGRES_DB=standup_db_dev
+    ports:
+      - '9052:5432'
+    working_dir: /data/db
+    volumes:
+      - 'primary_hhd_standup:/data/db'
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  pgAdmin:
+    image: dpage/pgadmin4:latest
+    container_name: PGAdmin
+    restart: unless-stopped
+    networks:
+      - standup-network
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=dev@dev.com
+      - PGADMIN_DEFAULT_PASSWORD=StandUpDEV
+    ports:
+      - '9053:80'
+    depends_on:
+      - db
+    volumes:
+      - 'primary_hhd_standup:/pgAdmin'
+
+
+volumes:
+  primary_hhd_standup:
+
+
+networks:
+  standup-network:
+    driver: bridge

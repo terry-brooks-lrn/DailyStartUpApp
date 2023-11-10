@@ -9,7 +9,7 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.utils import IntegrityError
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
 from django.views.decorators.csrf import csrf_exempt
 from logtail import LogtailHandler
 from loguru import logger
@@ -19,7 +19,6 @@ from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework import status
 from django.contrib.auth import authenticate, login
 from django.core.exceptions import ObjectDoesNotExist
-
 
 
 PRIMARY_LOG_FILE = os.path.join(settings.BASE_DIR, "standup", "logs", "primary_ops.log")
@@ -32,10 +31,27 @@ logger.add(PRIMARY_LOG_FILE, diagnose=False, catch=True, backtrace=False, level=
 logger.add(LOGTAIL_HANDLER, diagnose=False, catch=True, backtrace=False, level="INFO")
 
 
+# SECTION - Login View
+
+
+def login_view(request):
+    username = request.POST["username"]
+    password = request.POST["password"]
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        login(request, user)
+        redirect(to=reverse("home"))
+    else:
+        pass
+
+
+# !SECTION
+
+
 # SECTION -  Template-Rendering Routes
 def root(request):
     try:
-        current_agenda = Agenda(date=NOW)
+        current_agenda = Agenda(date=NOW.format("YYYY-MM-DD"))
         current_agenda.select_driver()
         current_agenda.save()
     except IntegrityError:
@@ -46,64 +62,62 @@ def root(request):
     context["item_form"] = ItemForm()
     # SECTION - Core Queries for Dashboard
     # SECTION - Count of All Open Items
-    context["open_items_count"] = Item.objects.filter(
-        status__in=["NEW", "OPEN", "FYI"]
-    ).count()
+    context["open_items_count"] = Item.objects.filter(status__in=["NEW", "OPEN", "FYI"]).count()
     #!SECTION
 
     # SECTION - Count and Query of All Monitorimng Items
-    context["open_monitor_items"] = Item.objects.filter(
-        section="MONITOR", status__in=["NEW", "OPEN", "FYI"]
-    ).order_by("creator", "-date_created")
+    context["open_monitor_items"] = Item.objects.filter(section="MONITOR", status__in=["NEW", "OPEN", "FYI"]).order_by(
+        "creator", "-date_created"
+    )
     context["open_monitor_items_count"] = len(context["open_monitor_items"])
     #!SECTION
 
     # SECTION - Count and Query of All Review Items
-    context["open_review_items"] = Item.objects.filter(
-        section="REVIEW", status__in=["NEW", "OPEN"]
-    ).order_by("creator", "-date_created")
+    context["open_review_items"] = Item.objects.filter(section="REVIEW", status__in=["NEW", "OPEN"]).order_by(
+        "creator", "-date_created"
+    )
     context["open_review_items_count"] = len(context["open_review_items"])
     #!SECTION
 
     # SECTION - Count and Query of All Client Calls Items
-    context["open_calls_items"] = Item.objects.filter(
-        section="CALLS", status__in=["NEW", "OPEN"]
-    ).order_by("creator", "-date_created")
+    context["open_calls_items"] = Item.objects.filter(section="CALLS", status__in=["NEW", "OPEN"]).order_by(
+        "creator", "-date_created"
+    )
     context["open_call_items_count"] = len(context["open_calls_items"])
     #!SECTION
 
     # SECTION - Count and Query of Clients Needing Attention Items
-    context["open_focus_items"] = Item.objects.filter(
-        section="FOCUS", status__in=["NEW", "OPEN"]
-    ).order_by("creator", "-date_created")
+    context["open_focus_items"] = Item.objects.filter(section="FOCUS", status__in=["NEW", "OPEN"]).order_by(
+        "creator", "-date_created"
+    )
     context["open_focus_items_count"] = len(context["open_focus_items"])
     #!SECTION
 
     # SECTION - Count and Query of Team Needs  Items
-    context["open_needs_items"] = Item.objects.filter(
-        section="NEEDS", status__in=["NEW", "OPEN"]
-    ).order_by("creator", "-date_created")
+    context["open_needs_items"] = Item.objects.filter(section="NEEDS", status__in=["NEW", "OPEN"]).order_by(
+        "creator", "-date_created"
+    )
     context["open_needs_items_count"] = len(context["open_needs_items"])
     #!SECTION
 
     # SECTION - Count and Query of Internal Update Items
-    context["open_updates_items"] = Item.objects.filter(
-        section="UPDATES", status__in=["NEW", "OPEN"]
-    ).order_by("creator", "-date_created")
+    context["open_updates_items"] = Item.objects.filter(section="UPDATES", status__in=["NEW", "OPEN"]).order_by(
+        "creator", "-date_created"
+    )
     context["open_updates_items_count"] = len(context["open_updates_items"])
     #!SECTION
 
     # SECTION - Count and Query misc Items
-    context["open_misc_items"] = Item.objects.filter(
-        section="MISC", status__in=["NEW", "OPEN"]
-    ).order_by("creator", "-date_created")
+    context["open_misc_items"] = Item.objects.filter(section="MISC", status__in=["NEW", "OPEN"]).order_by(
+        "creator", "-date_created"
+    )
     context["open_misc_items_count"] = len(context["open_misc_items"])
     #!SECTION
 
     # SECTION - Count and Query Internal Items
-    context["open_internal_items"] = Item.objects.filter(
-        section="INTERNAL", status__in=["NEW", "OPEN"]
-    ).order_by("creator", "-date_created")
+    context["open_internal_items"] = Item.objects.filter(section="INTERNAL", status__in=["NEW", "OPEN"]).order_by(
+        "creator", "-date_created"
+    )
     context["weeks_win_oops"] = WIN_OOPS.objects.filter(date_occured__gte=NOW)
     context["wins_oops_count"] = len(context["weeks_win_oops"])
     #! SECTION -
@@ -127,16 +141,14 @@ def root(request):
     logger.debug(type(context["last_meeting"]))
     #!SECTION - Core Queries for Dashboard
     # NOTE - ROllover Function Invocation
-    # Agenda.status_rollover()
+    Agenda.status_rollover()
 
     return render(request, "index.html", context)
 
 
 def supportmail(request):
     context = dict()
-    context["current_supportmail_topics"] = Items.objects.filter(
-        added_support_mail == True
-    )
+    context["current_supportmail_topics"] = Items.objects.filter(added_support_mail == True)
 
 
 #!SECTION - Template-Rendering Routes

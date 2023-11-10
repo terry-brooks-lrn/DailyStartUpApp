@@ -3,7 +3,7 @@
 <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary text-center rounded p-4">
         <div class="d-flex align-items-center justify-content-between mb-4">
-            <h4 class="mb-0">Items For Review - {{open_review_items_count}}</h4>
+            <h4 class="mb-0">Client's Needing Attention - {{open_review_items_count}}</h4>
 
         </div>
         <div class="table-responsive">
@@ -47,8 +47,8 @@
                                 <td><button class="btn btn-sm btn-warning" onclick="resolveItem({{ item.id }})">Resolve</button></td>
                                 <td><button class="btn btn-sm btn-info" onclick="moveToMonitoring({{ item.id }})">Move to Monitoring Only </button></td>
                             </tr>
-                        {%  elif item.last_modifed > last_meeting %}
-                            <tr class='recently-updated'>
+                        {% elif item.last_modifed > last_meeting %}
+                            <tr class="recently-updated">
                                 <td><span class="badge rounded-pill bg-warning animate__animated animate__bounce">Updated!</span></td>
                                 <td>{{item.date_created}}</td>
                                 <td>{{ item.status }}</td>

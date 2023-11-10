@@ -22,6 +22,7 @@
                             <th scope="col">Action</th>
                             <th scope="col">Action</th>
                         </tr>
+                    </thead>
                         <tbody>
                             {% for item in open_review_items %}
                                 {% if item.status == "NEW" %}
@@ -57,7 +58,7 @@
                                             to Monitoring Only </button></td>
                                     </tr>
                                 {% elif item.last_modifed > last_meeting %}
-                                    <tr class='recently-updated'>
+                                    <tr class="recently-updated">
                                         <td><span
                                             class="badge rounded-pill bg-warning animate__animated animate__bounce">Updated!</span></td>
                                         <td>{{item.date_created}}</td>

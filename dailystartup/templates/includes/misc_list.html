@@ -55,7 +55,7 @@
                                         to Monitoring Only </button></td>
                                 </tr>
                             {% elif item.last_modifed > last_meeting %}
-                                <tr class='recently-updated'>
+                                <tr class="recently-updated">
                                     <td><span
                                         class="badge rounded-pill bg-warning animate__animated animate__bounce">Updated!</span></td>
                                     <td>{{item.date_created}}</td>
@@ -88,6 +88,7 @@
                             {% endif %}
                         {% endfor %}
                     </tbody>
+                </table>
                 </div>
         {% else %}
             <div class="row no-items">

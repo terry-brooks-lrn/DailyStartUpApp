@@ -3,8 +3,7 @@
 <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary text-center rounded p-4">
         <div class="d-flex align-items-center justify-content-between mb-4">
-            <h6 class="mb-0">Departmental/Company or Team Needs - {{
-                open_needs_items_count }}</h6>
+            <h6 class="mb-0">Departmental/Company or Team Needs - {{ open_needs_items_count }}</h6>
         </div>
         {% if open_needs_items_count > 0 %}
             <div class="table-responsive item-segmentation">
@@ -56,7 +55,7 @@
                                         to Monitoring Only </button></td>
                                 </tr>
                             {% elif item.last_modifed > last_meeting %}
-                                <tr class='recently-updated'>
+                                <tr class="recently-updated">
                                     <td><span
                                         class="badge rounded-pill bg-warning animate__animated animate__bounce">Updated!</span></td>
                                     <td>{{item.date_created}}</td>

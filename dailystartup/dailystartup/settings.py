@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     # Installed 3rd Apps
     "crispy_forms",
     "crispy_bootstrap5",
-    "rest_framework",  
+    "rest_framework",
     "health_check",  # required
     "health_check.db",  # stock Django health checkers
     "health_check.cache",
@@ -55,13 +55,18 @@ INSTALLED_APPS = [
     "health_check.contrib.redis",
     "martor",
     "corsheaders",
-   # Installed Internal App
+    "debug_toolbar",
+    # Installed Internal App
     "agenda",
     "api",
     "authentication",
 ]
 
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
 MIDDLEWARE = [
+    "kolo.middleware.KoloMiddleware",
     "django.middleware.cache.UpdateCacheMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -69,12 +74,12 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     # "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-        "django.middleware.cache.FetchFromCacheMiddleware",
-
+    "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 ROOT_URLCONF = "dailystartup.urls"
@@ -118,37 +123,26 @@ CACHEOPS = {
     # This also includes .first() and .last() calls,
     # as well as request.user or post.author access,
     # where Post.author is a foreign key to auth.User
-    'auth.user': {'ops': 'get', 'timeout': 60*15},
-
+    "auth.user": {"ops": "get", "timeout": 60 * 15},
     # Automatically cache all gets and queryset fetches
     # to other django.contrib.auth models for an hour
-    'auth.*': {'ops': {'fetch', 'get'}, 'timeout': 60*60},
-
+    "auth.*": {"ops": {"fetch", "get"}, "timeout": 60 * 60},
     # Cache all queries to Permission
     # 'all' is an alias for {'get', 'fetch', 'count', 'aggregate', 'exists'}
-    'auth.permission': {'ops': 'all', 'timeout': 60*60},
-
+    "auth.permission": {"ops": "all", "timeout": 60 * 60},
     # Enable manual caching on all other models with default timeout of an hour
     # Use Post.objects.cache().get(...)
     #  or Tags.objects.filter(...).order_by(...).cache()
     # to cache particular ORM request.
     # Invalidation is still automatic
-
     # And since ops is empty by default you can rewrite last line as:
-    '*.*': {'timeout': 60*60},
-
+    "*.*": {"timeout": 60 * 60},
     # NOTE: binding signals has its overhead, like preventing fast mass deletes,
     #       you might want to only register whatever you cache and dependencies.
-
     # Finally you can explicitely forbid even manual caching with:
-    'some_app.*': None,
+    "some_app.*": None,
 }
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": os.getenv("REDIS_URI")
-    }
-}
+CACHES = {"default": {"BACKEND": "django.core.cache.backends.redis.RedisCache", "LOCATION": os.getenv("REDIS_URI")}}
 REDIS_URL = os.getenv("REDIS_URI")
 # !SECTION
 # SECTION - Crispy Forms
@@ -158,7 +152,8 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 CSRF_COOKIE_HTTPONLY = False
-LOGIN_REDIRECT_URL = "/auth/login"
+LOGIN_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "home"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
 AUTH_USER_MODEL = "agenda.SupportEngineer"
@@ -183,8 +178,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend', # This is the default that allows us to log in via username
-    'authentication.backend.StandUpBackend'
+    "django.contrib.auth.backends.ModelBackend",  # This is the default that allows us to log in via username
+    "authentication.backend.StandUpBackend",
 ]
 
 # Internationalization
@@ -290,14 +285,10 @@ MARTOR_SEARCH_USERS_URL = "/martor/search-user/"  # default
 
 # Markdown Extensions
 # MARTOR_MARKDOWN_BASE_EMOJI_URL = 'https://www.webfx.com/tools/emoji-cheat-sheet/graphics/emojis/'     # from webfx
-MARTOR_MARKDOWN_BASE_EMOJI_URL = (
-    "https://github.githubassets.com/images/icons/emoji/"  # default from github
-)
+MARTOR_MARKDOWN_BASE_EMOJI_URL = "https://github.githubassets.com/images/icons/emoji/"  # default from github
 # or:
 MARTOR_MARKDOWN_BASE_EMOJI_URL = ""  # Completely disables the endpoint
-MARTOR_MARKDOWN_BASE_MENTION_URL = (
-    "https://python.web.id/author/"  # please change this to your domain
-)
+MARTOR_MARKDOWN_BASE_MENTION_URL = "https://python.web.id/author/"  # please change this to your domain
 
 # If you need to use your own themed "bootstrap" or "semantic ui" dependency
 # replace the values with the file in your static files dir

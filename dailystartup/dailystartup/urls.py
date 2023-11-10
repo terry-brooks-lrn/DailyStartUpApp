@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 import api.urls
 import agenda.urls
+import authentication.urls
 from agenda.models import SupportEngineer
 from django.urls import include, path, re_path
 from rest_framework import routers, serializers, viewsets
@@ -45,5 +46,7 @@ urlpatterns = [
     path("api", include(api.urls)),
     path("martor/", include("martor.urls")),
     path("auth/", include("django.contrib.auth.urls")),
+    path("auth/", include("authentication.urls")),
     re_path(r"^ht/", include("health_check.urls")),
+    path("__debug__/", include("debug_toolbar.urls")),
 ]

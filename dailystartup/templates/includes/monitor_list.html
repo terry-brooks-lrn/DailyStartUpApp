@@ -23,7 +23,6 @@
                     </thead>
                     <tbody>
                         {% for item in open_monitor_items %}
-                            <tbody>
                                 {% for item in open_review_items %}
                                     {% if item.status == "NEW" %}
                                         <tr class="new-item">
@@ -47,8 +46,8 @@
                                             <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
                                             <td><button class="btn btn-sm btn-warning" onclick="resolveItem({{ item.id }})">Resolve</button></td>
                                         </tr>
-                                    {%  elif item.last_modifed > last_meeting %}
-                                        <tr class='recently-updated'>
+                                    {% elif item.last_modifed > last_meeting %}
+                                        <tr class="recently-updated">
                                             <td><span class="badge rounded-pill bg-warning animate__animated animate__bounce">Updated!</span></td>
                                             <td>{{item.date_created}}</td>
                                             <td>{{ item.status }}</td>

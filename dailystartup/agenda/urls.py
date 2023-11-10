@@ -3,10 +3,9 @@ from django.urls import path
 from django.views.decorators.cache import cache_page
 
 urlpatterns = [
-
     # SECTION -  Template Rendering URLs
-    path("", cache_page(timeout=43200, key_prefix="agenda")(views.root), name="home"),
-    path("support-mail", cache_page(timeout=43200, key_prefix="agenda")(views.supportmail), name="support-mail"),
+    path("", cache_page(timeout=1800, key_prefix="agenda")(views.root), name="home"),
+    path("support-mail", cache_page(timeout=1800, key_prefix="agenda")(views.supportmail), name="support-mail"),
     # SECTION - AJAX Hook URLs
     path("get-item-detail", views.get_item_details, name="get-item-details"),
     path("solve-item", views.resolve_item, name="solve-item"),

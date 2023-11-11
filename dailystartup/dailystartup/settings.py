@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # Installed 3rd Apps
+    "captcha",
     "crispy_forms",
     "crispy_bootstrap5",
     "rest_framework",
@@ -61,7 +62,8 @@ INSTALLED_APPS = [
     "api",
     "authentication",
 ]
-
+RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY")
+RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY")
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
@@ -198,7 +200,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
-
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 

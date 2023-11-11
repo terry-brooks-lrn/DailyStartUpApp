@@ -17,16 +17,21 @@
                                 ASE Stand-Up Agenda <br> Engineer Log-In</h3>
                         </a>
                     </div>
-                    <div class="message-container">
-
-                    </div>
-                    <form method="post">
+                    {% if messages %}
+                        <div class="message-container">
+                            {% for message in messages %}
+                                <div class="alert alert-danger d-flex align-items-center" role="alert">
+                                    <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                                    <div>
+                                        {{ message }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <form method="post" action={% url 'login' %}>
                         {% csrf_token %}
                         {%  crispy form %}
-                        <p><a href="{% url 'password_reset' %}">Forgot Password?</p></a>
-                        <button type="submit"
-                                class="btn btn-primary py-3 w-100 mb-4">Sign In</button>
-
                     </div>
                 </div>
             </div>

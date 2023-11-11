@@ -18,7 +18,7 @@ from agenda.errors import AgendaItemClassificationError
 from django.contrib.auth.base_user import BaseUserManager
 
 # SECTION - Important note - This insatation of the Current date and time is used by other modules Deletion or altering this instance is not possible
-NOW = arrow.now('US/Eastern').format('YYYY-MM-DD')
+NOW = arrow.now("US/Eastern").format("YYYY-MM-DD")
 
 PRIMARY_LOG_FILE = os.path.join(settings.BASE_DIR, "standup", "logs", "primary_ops.log")
 CRITICAL_LOG_FILE = os.path.join(settings.BASE_DIR, "standup", "logs", "fatal.log")
@@ -28,6 +28,7 @@ LOGTAIL_HANDLER = LogtailHandler(source_token=os.getenv("LOGTAIL_API_KEY"))
 logger.add(DEBUG_LOG_FILE, diagnose=True, catch=True, backtrace=True, level="DEBUG")
 logger.add(PRIMARY_LOG_FILE, diagnose=False, catch=True, backtrace=False, level="INFO")
 logger.add(LOGTAIL_HANDLER, diagnose=False, catch=True, backtrace=False, level="INFO")
+
 
 class SupportEngineerManager(BaseUserManager):
     """
@@ -99,7 +100,6 @@ class EDITION(models.TextChoices):
     DEC = 12, _("Decemeber")
 
 
-
 class SupportMail(models.Model):
     edition = models.CharField(max_length=3, choices=EDITION.choices)
     year = models.IntegerField(default=datetime.datetime.now().year)
@@ -148,18 +148,14 @@ class Item(models.Model):
     date_created = models.DateField(auto_now_add=True)
     date_resolved = models.DateField(null=True, blank=True)
     last_modified = models.DateTimeField(blank=True, null=True, auto_now=True)
-    status = models.CharField(
-        max_length=65535, choices=STATUS.choices, default=STATUS.NEW
-    )
+    status = models.CharField(max_length=65535, choices=STATUS.choices, default=STATUS.NEW)
     section = models.CharField(max_length=65535, choices=SECTION.choices)
     title = models.CharField(max_length=65535, null=False, default="")
     link_to_ticket = models.URLField(default="", null=True, blank=True)
     description = MartorField()
     notes = MartorField(null=True, blank=True, default="")
     added_to_supportmail = models.BooleanField(default=False)
-    next_task_needed_to_resolve = models.CharField(
-        max_length=65535, null=True, blank=True
-    )
+    next_task_needed_to_resolve = models.CharField(max_length=65535, null=True, blank=True)
     owner_of_next_task_needed_to_resolve = models.ForeignKey(
         SupportEngineer,
         on_delete=models.PROTECT,
@@ -167,11 +163,10 @@ class Item(models.Model):
         null=True,
         blank=True,
     )
+    next_task_due_date = models.DateField(blank=True, null=True)
     added_to_supportmail = models.BooleanField(default=False)
     added_to_supportmail_on = models.DateField(blank=True, null=True)
-    supportmail_edition = models.ForeignKey(
-        SupportMail, on_delete=models.PROTECT, blank=True, null=True
-    )
+    supportmail_edition = models.ForeignKey(SupportMail, on_delete=models.PROTECT, blank=True, null=True)
 
     def __str__(self):
         return f"{self.status} - {self.date_created} - {self.section} - {self.title}"
@@ -300,8 +295,7 @@ class Item(models.Model):
         verbose_name = "Agenda Item"
         verbose_name_plural = "Agenda Item"
         CheckConstraint(
-            check=Q(section__in=["IFEAT"])
-            & Q(status__in=["NEW", "ACCETED", "REJECTED", "BACKLOG"]),
+            check=Q(section__in=["IFEAT"]) & Q(status__in=["NEW", "ACCETED", "REJECTED", "BACKLOG"]),
             name="age_gte_18",
         )
 
@@ -328,12 +322,8 @@ class WIN_OOPS(models.Model):
 
 class Agenda(models.Model):
     date = models.CharField(primary_key=True, unique=True, default=NOW)
-    driver = models.ForeignKey(
-        SupportEngineer, on_delete=models.PROTECT, related_name="driver", null=True
-    )
-    notetaker = models.ForeignKey(
-        SupportEngineer, on_delete=models.PROTECT, related_name="notetaker", null=True
-    )
+    driver = models.ForeignKey(SupportEngineer, on_delete=models.PROTECT, related_name="driver", null=True)
+    notetaker = models.ForeignKey(SupportEngineer, on_delete=models.PROTECT, related_name="notetaker", null=True)
 
     class Meta:
         db_table = "agendas"
@@ -342,7 +332,6 @@ class Agenda(models.Model):
         get_latest_by = "date"
         verbose_name_plural = "Agendas"
         get_latest_by = ["date"]
-
 
     def _select_notetaker(self):
         """Selects the notetaker for the current agenda.
@@ -383,7 +372,7 @@ class Agenda(models.Model):
 
     def __str__(self):
         return str(self.date)
-    
+
     @staticmethod
     def status_rollover():
         """Static Method of the Agenda Class. This utility function will mark items that were not created on the same calendar day as the function is run AND if there is a difference of 1 or more days between the item creation date and the last date of the agenda.

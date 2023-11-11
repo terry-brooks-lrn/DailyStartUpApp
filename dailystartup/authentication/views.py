@@ -29,9 +29,10 @@ def login_user(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            redirect(to=reverse("home"))
+            return redirect("home")
         else:
-            pass
+            messages.success(request, ("Error Logging In, Please Try Again."))
+            return redirect("login")
     else:
         context = dict()
         context["form"] = LoginForm()

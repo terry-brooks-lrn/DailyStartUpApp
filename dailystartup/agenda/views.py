@@ -17,7 +17,6 @@ from rest_framework.decorators import renderer_classes
 from rest_framework.exceptions import NotFound
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework import status
-from django.contrib.auth import authenticate, login
 from django.core.exceptions import ObjectDoesNotExist
 
 
@@ -29,23 +28,6 @@ LOGTAIL_HANDLER = LogtailHandler(source_token=os.getenv("LOGTAIL_API_KEY"))
 logger.add(DEBUG_LOG_FILE, diagnose=True, catch=True, backtrace=True, level="DEBUG")
 logger.add(PRIMARY_LOG_FILE, diagnose=False, catch=True, backtrace=False, level="INFO")
 logger.add(LOGTAIL_HANDLER, diagnose=False, catch=True, backtrace=False, level="INFO")
-
-
-# SECTION - Login View
-
-
-def login_view(request):
-    username = request.POST["username"]
-    password = request.POST["password"]
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
-        login(request, user)
-        redirect(to=reverse("home"))
-    else:
-        pass
-
-
-# !SECTION
 
 
 # SECTION -  Template-Rendering Routes
@@ -120,7 +102,15 @@ def root(request):
     )
     context["weeks_win_oops"] = WIN_OOPS.objects.filter(date_occured__gte=NOW)
     context["wins_oops_count"] = len(context["weeks_win_oops"])
-    #! SECTION -
+    #! SECTION
+    # SECTION - Count and Query Personal Tasks
+    context["personal_action_items"] = (
+        Item.objects.filter(status__in=["NEW", "OPEN", "FYI"])
+        .filter(owner_of_next_task_needed_to_resolve=request.user)
+        .order_by("-next_task_due_date")
+    )
+    context["personal_action_items_count"] = len(context["personal_action_items"])
+    #! SECTION
     # SECTION = Stats and DRIVER Query
     context["current_agenda_date"] = current_agenda_json.data["date"]
     # context["current_agenda_driver"] = current_agenda.driver
@@ -183,6 +173,7 @@ def resolve_item(request):
         logger.debug(f"Solving - {ItemSerializer(item)}")
         item.resolve()
         item.save()
+        logger.success(f"Resolved {item.title}")
         return HttpResponse(request, status=status.HTTP_200_OK)
     except (KeyError, ObjectDoesNotExist) as e:
         logger.debug(f"FAILED attempt to resolve an Item: {e}")
@@ -200,7 +191,7 @@ def resolve_item(request):
 def convert_to_fyi(request):
     """AJAX REQUEST Hook to convert an item to Monitoring Status.
 
-    This JS Request endpoint updates2 the following fields of based on the PK passed in POST BOdy.:
+    This JS Request endpoint updates the following fields of based on the PK passed in POST BOdy.:
     * Item.section to 'MONITOR'
     * Item.status tO 'FYI'
 
@@ -220,7 +211,7 @@ def convert_to_fyi(request):
         item.make_visibility_only()
         item.save()
         return HttpResponse(request, status=status.HTTP_200_OK)
-    except (KeyError, DoesNotExist) as e:
+    except (KeyError, ObjectDoesNotExist) as e:
         raise NotFound(
             detail="Invalid PK passed. Unable to Convert Item to FYI",
             code=status.HTTP_404_NOT_FOUND,
@@ -254,7 +245,7 @@ def mark_feat_accepted(request):
         item.mark_accepted()
         item.save()
         return HttpResponse(request, status=status.HTTP_200_OK)
-    except (KeyError, DoesNotExist) as e:
+    except (KeyError, ObjectDoesNotExist) as e:
         raise NotFound(
             detail="Invalid PK passed. Unable to Convert Item to FYI",
             code=status.HTTP_404_NOT_FOUND,
@@ -288,7 +279,7 @@ def mark_feat_rejected(request):
         item.mark_rejected()
         item.save()
         return HttpResponse(request, status=status.HTTP_200_OK)
-    except (KeyError, DoesNotExist) as e:
+    except (KeyError, ObjectDoesNotExist) as e:
         raise NotFound(
             detail="Invalid PK passed. Unable to Convert Item to FYI",
             code=status.HTTP_404_NOT_FOUND,
@@ -326,7 +317,7 @@ def reopen_item(request):
         item.reopen()
         item.save()
         return HttpResponse(request, status=status.HTTP_200_OK)
-    except (KeyError, DoesNotExist) as e:
+    except (KeyError, ObjectDoesNotExist) as e:
         raise NotFound(
             detail="Invalid PK passed. Unable to Convert Item to FYI",
             code=status.HTTP_404_NOT_FOUND,

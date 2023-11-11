@@ -30,6 +30,10 @@
 
         <!-- Current Tasks Stats Ends -->
 
+        <!-- Your Tasks Starts  -->
+        {% include 'includes/your-tasks.html' %}
+        <!-- Your Tasks Ends  -->
+
         <!-- Items Lists Start -->
                 {% include "includes/review_list.html" %}
                 {% include "includes/monitor_list.html" %}
@@ -39,7 +43,7 @@
                 {% include "includes/needs_list.html" %}
                 {% include "includes/updates_list.html" %}
                 {% include "includes/misc_list.html" %}
-                {% include "includes/item-log.html" %}
+                {% comment %} {% include "includes/item-log.html" %} {% endcomment %}
             </div>
         <!-- Item Lists End -->
         </div>

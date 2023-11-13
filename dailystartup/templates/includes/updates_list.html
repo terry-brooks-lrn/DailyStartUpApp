@@ -3,8 +3,7 @@
 <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary text-center rounded p-4">
         <div class="d-flex align-items-center justify-content-between mb-4">
-            <h6 class="mb-0">Personal or Social Updates - {{
-                open_updates_items_count }}</h6>
+            <h6 class="mb-0">Personal or Social Updates - {{ open_updates_items_count }}</h6>
         </div>
         {% if open_updates_items_count > 0 %}
             <div class="table-responsive item-segmentation">
@@ -24,7 +23,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for item in open_review_items %}
+                        {% for item in open_updates_items %}
                             {% if item.status == "NEW" %}
                                 <tr class="new-item">
                                     <td><span class="badge rounded-pill bg-success">NEW!</span></td>
@@ -32,8 +31,7 @@
                                     <td>{{ item.status }}</td>
                                     <td>{{ item.creator }}</td>
                                     <td>{{ item.title }}</td>
-                                    <td><a href="{{ item.link_to_ticket}}"
-                                           target="_blank">{{item.link_to_ticket}}</a></td>
+                                    <td><a href="{{ item.link_to_ticket}}" target="_blank">{{item.link_to_ticket}}</a></td>
                                     <td><a class="btn btn-sm btn-primary" href>Detail</a></td>
                                     <td><button class="btn btn-sm btn-warning"
                                                 onclick="resolveItem({{ item.id }})">Resolve</button></td>
@@ -48,8 +46,7 @@
                                     <td>{{ item.status }}</td>
                                     <td>{{ item.creator }}</td>
                                     <td>{{ item.title }}</td>
-                                    <td><a href="{{ item.link_to_ticket}}"
-                                           target="_blank">{{item.link_to_ticket}}</a></td>
+                                    <td><a href="{{ item.link_to_ticket}}" target="_blank">{{item.link_to_ticket}}</a></td>
                                     <td><a class="btn btn-sm btn-primary" href>Detail</a></td>
                                     <td><button class="btn btn-sm btn-warning"
                                                 onclick="resolveItem({{ item.id }})">Resolve</button></td>
@@ -65,8 +62,7 @@
                                     <td>{{ item.status }}</td>
                                     <td>{{ item.creator }}</td>
                                     <td>{{ item.title }}</td>
-                                    <td><a href="{{ item.link_to_ticket}}"
-                                           target="_blank">{{item.link_to_ticket}}</a></td>
+                                    <td><a href="{{ item.link_to_ticket}}" target="_blank">{{item.link_to_ticket}}</a></td>
                                     <td><button class="btn btn-sm btn-primary" onclick>Detail</button></td>
                                     <td><button class="btn btn-sm btn-warning"
                                                 onclick="resolveItem({{ item.id }})">Resolve</button></td>
@@ -81,8 +77,7 @@
                                     <td>{{ item.status }}</td>
                                     <td>{{ item.creator }}</td>
                                     <td>{{ item.title }}</td>
-                                    <td><a href="{{ item.link_to_ticket}}"
-                                           target="_blank">{{item.link_to_ticket}}</a></td>
+                                    <td><a href="{{ item.link_to_ticket}}" target="_blank">{{item.link_to_ticket}}</a></td>
                                     <td><button class="btn btn-sm btn-primary" onclick>Detail</button></td>
                                     <td><button class="btn btn-sm btn-warning"
                                                 onclick="resolveItem({{ item.id }})">Resolve</button></td>

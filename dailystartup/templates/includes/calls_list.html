@@ -3,9 +3,9 @@
 <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary text-center rounded p-4">
         <div class="d-flex align-items-center justify-content-between mb-4">
-            <h6 class="mb-0">Upcomimg Client Calls - {{ open_calls_items_count }}</h6>
+            <h6 class="mb-0">Upcoming Client Calls - {{ open_call_items_count }}</h6>
         </div>
-        {% if open_calls_items_count > 0 %}
+        {% if open_call_items_count > 0 %}
             <div class="table-responsive item-segmentation">
                 <table
                     class="table text-start align-middle table-bordered table-hover mb-0">
@@ -22,8 +22,8 @@
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
-                    {% for item in open_calls_items %}
-                        <tbody>
+                    <tbody>
+                        {% for item in open_calls_items %}
                             {% if item.status == "NEW" %}
                                 <tr class="new-item">
                                     <td><span class="badge rounded-pill bg-success">NEW!</span></td>
@@ -31,10 +31,13 @@
                                     <td>{{ item.status }}</td>
                                     <td>{{ item.creator }}</td>
                                     <td>{{ item.title }}</td>
-                                    <td><a href="{{ item.link_to_ticket}}"  target="_blank">{{item.link_to_ticket}}</a></td>
-                                    <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                                    <td><button class="btn btn-sm btn-warning" onclick="resolveItem({{ item.id }})">Resolve</button></td>
-                                    <td><button class="btn btn-sm btn-info" onclick="moveToMonitoring({{ item.id }})">Move to Monitoring Only </button></td>
+                                    <td><a href="{{ item.link_to_ticket}}" target="_blank">{{item.link_to_ticket}}</a></td>
+                                    <td><a class="btn btn-sm btn-primary" href>Detail</a></td>
+                                    <td><button class="btn btn-sm btn-warning"
+                                                onclick="resolveItem({{ item.id }})">Resolve</button></td>
+                                    <td><button class="btn btn-sm btn-info"
+                                                onclick="moveToMonitoring({{ item.id }})">Move
+                                        to Monitoring Only </button></td>
                                 </tr>
                             {% elif item.date_created >= stale_deadline %}
                                 <tr class="stale">
@@ -43,22 +46,29 @@
                                     <td>{{ item.status }}</td>
                                     <td>{{ item.creator }}</td>
                                     <td>{{ item.title }}</td>
-                                    <td><a href="{{ item.link_to_ticket}}"  target="_blank">{{item.link_to_ticket}}</a></td>
-                                    <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                                    <td><button class="btn btn-sm btn-warning" onclick="resolveItem({{ item.id }})">Resolve</button></td>
-                                    <td><button class="btn btn-sm btn-info" onclick="moveToMonitoring({{ item.id }})">Move to Monitoring Only </button></td>
+                                    <td><a href="{{ item.link_to_ticket}}" target="_blank">{{item.link_to_ticket}}</a></td>
+                                    <td><a class="btn btn-sm btn-primary" href>Detail</a></td>
+                                    <td><button class="btn btn-sm btn-warning"
+                                                onclick="resolveItem({{ item.id }})">Resolve</button></td>
+                                    <td><button class="btn btn-sm btn-info"
+                                                onclick="moveToMonitoring({{ item.id }})">Move
+                                        to Monitoring Only </button></td>
                                 </tr>
                             {% elif item.last_modifed > last_meeting %}
                                 <tr class="recently-updated">
-                                    <td><span class="badge rounded-pill bg-warning animate__animated animate__bounce">Updated!</span></td>
+                                    <td><span
+                                        class="badge rounded-pill bg-warning animate__animated animate__bounce">Updated!</span></td>
                                     <td>{{item.date_created}}</td>
                                     <td>{{ item.status }}</td>
                                     <td>{{ item.creator }}</td>
                                     <td>{{ item.title }}</td>
-                                    <td><a href="{{ item.link_to_ticket}}"  target="_blank">{{item.link_to_ticket}}</a></td>
-                                    <td><button class="btn btn-sm btn-primary" onclick="">Detail</button></td>
-                                    <td><button class="btn btn-sm btn-warning" onclick="resolveItem({{ item.id }})">Resolve</button></td>
-                                    <td><button class="btn btn-sm btn-info" onclick="moveToMonitoring({{ item.id }})">Move to Monitoring Only </button></td>
+                                    <td><a href="{{ item.link_to_ticket}}" target="_blank">{{item.link_to_ticket}}</a></td>
+                                    <td><button class="btn btn-sm btn-primary" onclick>Detail</button></td>
+                                    <td><button class="btn btn-sm btn-warning"
+                                                onclick="resolveItem({{ item.id }})">Resolve</button></td>
+                                    <td><button class="btn btn-sm btn-info"
+                                                onclick="moveToMonitoring({{ item.id }})">Move
+                                        to Monitoring Only </button></td>
                                 </tr>
                             {% else %}
                                 <tr>
@@ -67,20 +77,23 @@
                                     <td>{{ item.status }}</td>
                                     <td>{{ item.creator }}</td>
                                     <td>{{ item.title }}</td>
-                                    <td><a href="{{ item.link_to_ticket}}"  target="_blank">{{item.link_to_ticket}}</a></td>
-                                    <td><button class="btn btn-sm btn-primary" onclick="">Detail</button></td>
-                                    <td><button class="btn btn-sm btn-warning" onclick="resolveItem({{ item.id }})">Resolve</button></td>
-                                    <td><button class="btn btn-sm btn-info" onclick="moveToMonitoring({{ item.id }})">Move to Monitoring Only </button></td>
+                                    <td><a href="{{ item.link_to_ticket}}" target="_blank">{{item.link_to_ticket}}</a></td>
+                                    <td><button class="btn btn-sm btn-primary" onclick>Detail</button></td>
+                                    <td><button class="btn btn-sm btn-warning"
+                                                onclick="resolveItem({{ item.id }})">Resolve</button></td>
+                                    <td><button class="btn btn-sm btn-info"
+                                                onclick="moveToMonitoring({{ item.id }})">Move
+                                        to Monitoring Only </button></td>
                                 </tr>
                             {% endif %}
-
-                    {% endfor %}
-                </tbody>
-            </table>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         {% else %}
             <div class="row no-items">
-                <div class="no-work-copy"> Nothing to See Here! How about a Quick Laugh? 🤣</div>
+                <div class="no-work-copy"> Nothing to See Here! How about a
+                    Quick Laugh? 🤣</div>
                 <h3 id="joke" class="col-12 yo-mama-joke"></h3>
             </div>
         {% endif %}

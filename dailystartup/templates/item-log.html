@@ -25,25 +25,31 @@
                             <tr class="text-white">
                                 <th scope="col"></th>
                                 <th scope="col">Date Added</th>
+                                <th scope="col">Date Resolved</th>
                                 <th scope="col">Status</th>
+                                <th scope="col">Section</th>
                                 <th scope="col">Support Engineer</th>
                                 <th scope="col">Title</th>
                                 <th scope="col">Link</th>
-                                <th scope="col">Action</th>
+                                <th scope="col">Added to SupportMail?</th>
+                                <th scope="col">SupportMail Edition</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for item in resolved_items %}
+                            {% for item in master_item_log %}
                                 <tr>
                                     <td></td>
                                     <td>{{ item.date_created }}</td>
                                     <td>{{ item.date_resolved }}</td>
+                                    <td>{{ item.status }}</td>
+                                    <td>{{ item.section }}</td>
                                     <td>{{ item.creator }}</td>
                                     <td>{{ item.title }}</td>
-                                    <td><a href="{{ item.link_to_ticket }}" target="_blank">{{ item.link_to_ticket }}</a></td>
-                                    <td><button class="btn btn-sm btn-primary" onclick>Detail</button></td>
-                                    <td><button class="btn btn-sm btn-warning"
+                                    <td>{{ item.link_to_ticket}}</td>
+                                    <td>{{ item.added_to_supportmail }}</td>
+                                    <td>{{ item.added_to_supportmail }}</td>
+                                    <td><button class="btn btn-sm btn-primary"
                                                 onclick="reopenItem({{ item.id }})">Reopen</button></td>
                                 </tr>
                             {% endfor %}

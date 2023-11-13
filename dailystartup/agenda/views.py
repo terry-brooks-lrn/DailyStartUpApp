@@ -37,7 +37,11 @@ def root(request):
         current_agenda.select_driver()
         current_agenda.save()
     except IntegrityError:
-        logger.warning(f"{NOW} Already Has Agenda Created - Skipping Creation")
+        if current_agenda.driver is None:
+            current_agenda = Agenda.objects.get(pk=NOW.format("YYYY-MM-DD"))
+            current_agenda.driver = current_agenda.select_driver()
+            current_agenda.save()
+            logger.warning(f"{NOW} Already Has Agenda    Created - Skipping Creation")
     # current_agenda.select_driver()]
     current_agenda_json = AgendaSerializer(current_agenda)
     context = dict()
@@ -89,6 +93,18 @@ def root(request):
     context["open_updates_items_count"] = len(context["open_updates_items"])
     #!SECTION
 
+    # SECTION - Count and Query ifeat Items
+    context["open_doc_items"] = Item.objects.filter(section="DOC", status__in=["NEW", "OPEN"]).order_by(
+        "creator", "-date_created"
+    )
+    context["open_doc_items_count"] = len(context["open_doc_items"])
+    #!SECTION
+    # SECTION - Count and Query ifeat Items
+    context["open_ifeat_items"] = Item.objects.filter(section="IFEAT", status__in=["NEW", "OPEN"]).order_by(
+        "creator", "-date_created"
+    )
+    context["open_ifeat_items_count"] = len(context["open_ifeat_items"])
+    #!SECTION
     # SECTION - Count and Query misc Items
     context["open_misc_items"] = Item.objects.filter(section="MISC", status__in=["NEW", "OPEN"]).order_by(
         "creator", "-date_created"
@@ -100,6 +116,10 @@ def root(request):
     context["open_internal_items"] = Item.objects.filter(section="INTERNAL", status__in=["NEW", "OPEN"]).order_by(
         "creator", "-date_created"
     )
+    context['open_internal_items_count'] = len(context['open_internal_items'])
+    #!SECTION 
+    
+    # SECTION - Count and Query for Wins and Oops Moments
     context["weeks_win_oops"] = WIN_OOPS.objects.filter(date_occured__gte=NOW)
     context["wins_oops_count"] = len(context["weeks_win_oops"])
     #! SECTION
@@ -109,11 +129,11 @@ def root(request):
         .filter(owner_of_next_task_needed_to_resolve=request.user)
         .order_by("-next_task_due_date")
     )
-    context["personal_action_items_count"] = len(context["personal_action_items"])
+    context["personal_action_itsems_count"] = len(context["personal_action_items"])
     #! SECTION
     # SECTION = Stats and DRIVER Query
     context["current_agenda_date"] = current_agenda_json.data["date"]
-    # context["current_agenda_driver"] = current_agenda.driver
+    context["current_agenda_driver"] = current_agenda.driver
     context["current_agenda_notetaker"] = current_agenda.notetaker
     context["stale_deadline"] = arrow.get(
         month=int(NOW.split("-")[1]),
@@ -138,9 +158,13 @@ def root(request):
 
 def supportmail(request):
     context = dict()
-    context["current_supportmail_topics"] = Items.objects.filter(added_support_mail == True)
+    context["current_supportmail_topics"] = Items.objects.filter(added_support_mail=True)
+    return render(request,"supportmail.html", context)
 
-
+def item_log(request):
+    context = dict()
+    context['master_item_log'] = Items.objects.all().order_by("-date_resolved", "-date_created")
+    return render(request,"item-log.html", context)
 #!SECTION - Template-Rendering Routes
 
 

@@ -10,7 +10,6 @@
                     class="table text-start align-middle table-bordered table-hover mb-0">
                     <thead>
                         <tr class="text-white">
-                            <th scope="col"></th>
                             <th scope="col">Action Item</th>
                             <th scope="col">Related Agenda Item</th>
                             <th scope="col">Due Date</th>
@@ -19,7 +18,6 @@
                     <tbody>
                         {% for item in personal_action_items %}
                                 <tr>
-                                    <td></td>
                                     <td>{{item.next_task_needed_to_resolve}}</td>
                                     <td>{{ item.title }}</td>
                                     <td>{{ item.next_task_due_date }}</td>

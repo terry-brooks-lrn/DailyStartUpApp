@@ -360,10 +360,11 @@ class Agenda(models.Model):
         Returns:
             None
         """
-
-        self._select_notetaker()
-        team = SupportEngineer.objects.all()
-        self.driver = random.choice(team)
+        if self.notetaker is None:
+            self._select_notetaker()
+        if self.driver is None:
+            team = SupportEngineer.objects.all()
+            self.driver = random.choice(team)
         if self.driver == self.notetaker:
             self.select_driver()
         else:

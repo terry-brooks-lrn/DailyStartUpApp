@@ -19,7 +19,7 @@
             <button id="add-item-modal'" data-bs-toggle="add-item-modal" data-bs-target="#add-item-modal" onclick="showAddItemModal()" class="nav-item nav-link"><i class="fa-solid fa-plus"></i> Add Item</button>
             <button id="add-oops-btn" data-bs-toggle="add-item-modal" data-bs-target="#add-item-modal" class="nav-item nav-link"><i class="fa-solid fa-plus"></i> Add Oops or Win</button>
             <button href="{% url 'support-mail' %}" class="nav-item nav-link"><i class="fa-solid fa-newspaper"></i> Current Support Mail Edition </button>
-            <button onclick="showAllItemsLog()" class="nav-item nav-link"><i class="fa-solid fa-check"></i>Resolved Items</button>
+            <button href="{% url 'item-log' %} "class="nav-item nav-link"><i class="fa-solid fa-check"></i>Master Items Log</button>
             <button onclick="showAllItemsLog()" class="nav-item nav-link"><i class="fa-solid fa-search"></i>Past Agendas</button>
         </div>
 

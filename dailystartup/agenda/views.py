@@ -12,6 +12,8 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, reverse
 from django.views.decorators.csrf import csrf_exempt
 from logtail import LogtailHandler
+from django.contrib.auth.decorators import login_required
+
 from loguru import logger
 from rest_framework.decorators import renderer_classes
 from rest_framework.exceptions import NotFound
@@ -31,6 +33,7 @@ logger.add(LOGTAIL_HANDLER, diagnose=False, catch=True, backtrace=False, level="
 
 
 # SECTION -  Template-Rendering Routes
+@login_required
 def root(request):
     try:
         current_agenda = Agenda(date=NOW.format("YYYY-MM-DD"))
@@ -116,25 +119,26 @@ def root(request):
     context["open_internal_items"] = Item.objects.filter(section="INTERNAL", status__in=["NEW", "OPEN"]).order_by(
         "creator", "-date_created"
     )
-    context['open_internal_items_count'] = len(context['open_internal_items'])
-    #!SECTION 
-    
+    context["open_internal_items_count"] = len(context["open_internal_items"])
+    #!SECTION
+
     # SECTION - Count and Query for Wins and Oops Moments
     context["weeks_win_oops"] = WIN_OOPS.objects.filter(date_occured__gte=NOW)
     context["wins_oops_count"] = len(context["weeks_win_oops"])
     #! SECTION
     # SECTION - Count and Query Personal Tasks
-    context["personal_action_items"] = (
-        Item.objects.filter(status__in=["NEW", "OPEN", "FYI"])
-        .filter(owner_of_next_task_needed_to_resolve=request.user)
-        .order_by("-next_task_due_date")
-    )
+    try:
+        context["personal_action_items"] = (
+            Item.objects.filter(status__in=["NEW", "OPEN", "FYI"])
+            .filter(owner_of_next_task_needed_to_resolve=request.user)
+            .order_by("-next_task_due_date")
+        )
+    except TypeError:
+        context["personal_action_items"] = "Non-Authenticated User"
     context["personal_action_itsems_count"] = len(context["personal_action_items"])
     #! SECTION
     # SECTION = Stats and DRIVER Query
     context["current_agenda_date"] = current_agenda_json.data["date"]
-    context["current_agenda_driver"] = current_agenda.driver
-    context["current_agenda_notetaker"] = current_agenda.notetaker
     context["stale_deadline"] = arrow.get(
         month=int(NOW.split("-")[1]),
         day=int(NOW.split("-")[2]),
@@ -149,6 +153,12 @@ def root(request):
     if context["last_meeting"] == current_agenda:
         context["last_meeting"] = Agenda.objects.all().order_by("-date")[1].date
     logger.debug(type(context["last_meeting"]))
+    try:
+        context["current_agenda_driver"] = current_agenda.driver
+        context["current_agenda_notetaker"] = current_agenda.notetaker
+    except Exception:
+        context["current_agenda_driver"] = " "
+        context["current_agenda_notetaker"] = " "
     #!SECTION - Core Queries for Dashboard
     # NOTE - ROllover Function Invocation
     Agenda.status_rollover()
@@ -156,15 +166,20 @@ def root(request):
     return render(request, "index.html", context)
 
 
+@login_required
 def supportmail(request):
     context = dict()
     context["current_supportmail_topics"] = Items.objects.filter(added_support_mail=True)
-    return render(request,"supportmail.html", context)
+    return render(request, "supportmail.html", context)
 
+
+@login_required
 def item_log(request):
     context = dict()
-    context['master_item_log'] = Items.objects.all().order_by("-date_resolved", "-date_created")
-    return render(request,"item-log.html", context)
+    context["master_item_log"] = Items.objects.all().order_by("-date_resolved", "-date_created")
+    return render(request, "item-log.html", context)
+
+
 #!SECTION - Template-Rendering Routes
 
 

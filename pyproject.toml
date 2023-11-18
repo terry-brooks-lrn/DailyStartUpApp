@@ -45,7 +45,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.djlint]
 format_css=true
 format_js=true
-ignore="H021,T001, H008, H017"
+ignore="H021,T001, H008, H017, H006"
 
 [tool.djlint.css]
 indent_size=5

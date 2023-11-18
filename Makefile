@@ -12,8 +12,8 @@ pip-update:
 
 
 update-db:
-	python standup/manage.py makemigrations
-	python standup/manage.py migrate
+	python dailystartup/manage.py makemigrations
+	python dailystartup/manage.py migrate
 
 save-point:
 	npx --yes dotenv-vault@1.24.0 push --yes
@@ -24,4 +24,4 @@ save-point:
 	git commit push
 
 go:
-	python ./standup/manage.py runserver
+	python ./dailystartup/manage.py runserver

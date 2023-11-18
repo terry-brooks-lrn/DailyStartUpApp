@@ -21,7 +21,7 @@ class StandUpBackend(BaseBackend):
         Overrides the authenticate method to allow users to log in using their email address.
         """
         login_valid = settings.ADMIN_LOGIN == username
-        pwd_valid = password == settings.ADMIN_PASSWORD 
+        pwd_valid = password == settings.ADMIN_PASSWORD
         if login_valid and pwd_valid:
             try:
                 user = SupportEngineer.objects.get(username=username)

@@ -17,11 +17,11 @@
                     </thead>
                     <tbody>
                         {% for item in personal_action_items %}
-                                <tr>
-                                    <td>{{item.next_task_needed_to_resolve}}</td>
-                                    <td>{{ item.title }}</td>
-                                    <td>{{ item.next_task_due_date }}</td>
-                                </tr>
+                            <tr>
+                                <td>{{item.next_task_needed_to_resolve}}</td>
+                                <td>{{ item.title }}</td>
+                                <td>{{ item.next_task_due_date }}</td>
+                            </tr>
                         {% endfor %}
                     </tbody>
                 </table>

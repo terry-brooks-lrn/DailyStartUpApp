@@ -65,7 +65,7 @@ class AgendaSerializer(serializers.ModelSerializer):
     update_items = serializers.SerializerMethodField()
     misc_items = serializers.SerializerMethodField()
     ifeat_items = serializers.SerializerMethodField()
-    
+
     def get_review_items(self, obj):
         """Get review items.
 
@@ -144,9 +144,7 @@ class AgendaSerializer(serializers.ModelSerializer):
         Returns:
             A list of valid review items that have a date_created earlier than obj.date.
         """
-        review_items = Item.objects.filter(
-            section="INTERNAL", status__in=["NEW", "OPEN"]
-        )
+        review_items = Item.objects.filter(section="INTERNAL", status__in=["NEW", "OPEN"])
         serialized_review_items = ItemSerializer(review_items, many=True)
         valid_items = list()
         for item in serialized_review_items.data:
@@ -170,7 +168,7 @@ class AgendaSerializer(serializers.ModelSerializer):
             if item["date_created"] < obj.date:
                 valid_items.append(item)
         return valid_items
-    
+
     def get_ifeat_items(self, obj):
         """Get internal feature request  items.
 
@@ -187,7 +185,7 @@ class AgendaSerializer(serializers.ModelSerializer):
             if item["date_created"] < obj.date:
                 valid_items.append(item)
         return valid_items
-    
+
     def get_update_items(self, obj):
         """Get personal and social update items.
 
@@ -197,9 +195,7 @@ class AgendaSerializer(serializers.ModelSerializer):
         Returns:
             A list of valid review items that have a date_created earlier than obj.date.
         """
-        review_items = Item.objects.filter(
-            section="UPDATES", status__in=["NEW", "OPEN"]
-        )
+        review_items = Item.objects.filter(section="UPDATES", status__in=["NEW", "OPEN"])
         serialized_review_items = ItemSerializer(review_items, many=True)
         valid_items = list()
         for item in serialized_review_items.data:
@@ -236,13 +232,9 @@ class AgendaSerializer(serializers.ModelSerializer):
         startdate = timezone.now()
         enddate = startdate + timedelta(days=7)
 
-        wins_mistakes = WIN_OOPS.objects.filter(
-            date_occured__gte=startdate, date_occured__lte=enddate
-
-        )
+        wins_mistakes = WIN_OOPS.objects.filter(date_occured__gte=startdate, date_occured__lte=enddate)
         serialized_items = WinsMistakesSerializer(wins_mistakes, many=True)
         return serialized_items.data
-
 
     class Meta:
         model = Agenda
@@ -259,5 +251,5 @@ class AgendaSerializer(serializers.ModelSerializer):
             "needs_items",
             "update_items",
             "misc_items",
-            "ifeat_items"
+            "ifeat_items",
         )

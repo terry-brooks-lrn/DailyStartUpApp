@@ -1,5 +1,6 @@
 {% extends "layouts/base-layout.html" %}
 {% load static %}
+{% block TITLE %}Support Mail{% endblock TITLE %}
 {% block MAIN %}
     <div class="container-fluid position-relative d-flex p-0">
     <!-- Spinner Start -->
@@ -19,7 +20,7 @@
 
             {% include "includes/navbar.html" %}
 
-            <h1>{{edition.get_display_edition }}{ {year }} Support Mail Edition</h1>
+            <h1>{{edition.get_display_edition }}{{ year }} Support Mail Edition</h1>
             <h3>Number of Issues in the Current Edition </h3>
             <div class="table-responsive item-segmentation">
                 <table
@@ -52,4 +53,6 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+    </div>
 {% endblock MAIN %}

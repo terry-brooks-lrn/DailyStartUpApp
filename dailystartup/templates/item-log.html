@@ -1,6 +1,6 @@
 {% extends "layouts/base-layout.html" %}
 {% load static %}
-
+{% block TITLE %}Resolved Item Log{% endblock TITLE %}
 
 {% include "includes/sidebar.html" %}
 {% include "includes/navbar.html" %}
@@ -17,7 +17,7 @@
         <div class="bg-secondary text-center rounded p-4">
             <div class="d-flex align-items-center justify-content-between mb-4">
                 <form class="d-none d-md-flex ms-4">
-                    <input class="form-control bg-dark border-0" type="search" placeholder="Search">
+                    <input class="form-control bg-dark border-0" type="search" placeholder="Search"/>
                 </form>
                 <div class="table-responsive">
                     <table class="table text-start align-middle table-bordered table-hover mb-0">
@@ -61,10 +61,9 @@
     </div>
 {% endblock MAIN %}
 
-
 {% block CUSTOM_SCRIPTS %}
 {% endblock CUSTOM_SCRIPTS %}
-</div>
+
     <!-- Footer Start -->
 <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary rounded-top p-4">

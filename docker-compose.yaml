@@ -10,9 +10,11 @@ services:
       - standup-network
     working_dir: /data/cache
     volumes:
+      - './redis.conf:/usr/local/etc/redis/redis.conf'
       - 'primary_hhd_standup:/data/cache'
     ports:
       - '9051:6379'
+    # command: redis-server /usr/local/etc/redis/redis.conf
     healthcheck:
       test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
       interval: 5m

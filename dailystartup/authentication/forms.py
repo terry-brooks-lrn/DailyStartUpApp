@@ -16,15 +16,13 @@ from django.shortcuts import redirect
 class LoginForm(Form):
     username = CharField(label="Username", max_length=80, required=True)
     password = CharField(label="Password", widget=PasswordInput())
-    remember = BooleanField(label="Keep Me Loggec")
+    remember = BooleanField(label="Keep Me Logged In")
     # captcha = ReCaptchaField()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_id = "login-form"
-        self.helper.form_method = "post"
-        self.helper.form_action = reverse("login")
         self.helper.layout = Layout(
             Row(
                 Column("username", css_class="form-group col-md-6 mb-0"),
@@ -33,23 +31,17 @@ class LoginForm(Form):
             ),
             Row("remember", css_class="form-row"),
             # Row('captcha', css_class="form-row"),
-            Row(
-                FormActions(
-                    Button(
-                        "submit",
-                        "Login",
-                        onclick="createItem()",
-                        css_class="btn btn-success",
-                    ),
-                    Button(
-                        "button",
-                        "Forgot Password",
-                        onclick=redirect("password_reset"),
-                        css_class="btn btn-danger",
-                    ),
-                    css_class="modal-footer",
-                ),
-            ),
+            # Row(
+            #     FormActions(
+            #         Button(
+            #             "submit",
+            #             "Login",
+            #             css_class="btn btn-success",
+            #         ),
+            #         HTML('<a class="btn btn-danger" href="/auth/password_reset">Forgot Pasword</a>'),
+            #         css_class="modal-footer",
+            #     ),
+            # ),
         )
 
     class Meta:

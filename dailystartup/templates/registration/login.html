@@ -9,7 +9,6 @@
              style="min-height: 100vh;">
             <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
 
-                <form action="{% url 'login' %}" method="post">
                     <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
                         <div class="d-flex align-items-center justify-content-between mb-3">
                                 <h3 class="text-primary"><i class="fa fa-user-edit me-2" aria-hidden="true"></i>
@@ -17,14 +16,13 @@
                         </div>
                         {% if form.errors %}
                             <div class="message-container">
-                                {% for error in forms.errors %}
                                     <div class="alert alert-danger d-flex align-items-center" role="alert">
-                                        <i class="fa-solid fa-circle-xmark"></i>                                        <div>
-                                            {{ error }}
+                                        <i class="fa-solid fa-circle-xmark"></i>
+                                        <div>
+                                            <p>Invaild Inputs</p>
                                         </div>
                                     </div>
-                                {% endfor %}
-                            </div>
+                      </div>
                         {% endif %}
                         {% if next %}
                             <div class="alert alert-danger d-flex align-items-center" role="alert">
@@ -56,7 +54,6 @@
                         </form>
 
                     </div>
-                </form>
 
             </div>
         </div>

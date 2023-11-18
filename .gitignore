@@ -117,7 +117,7 @@ lib/
 
 # mkdocs documentation
 /site
-
+node_modules/
 # mypy
 .mypy_cache/
 

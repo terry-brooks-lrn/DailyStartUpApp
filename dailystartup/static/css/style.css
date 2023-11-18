@@ -16,7 +16,7 @@
 
 
 /*** Spinner ***/
-#spinner {ƒ
+#spinner {
     opacity: 0;
     visibility: hidden;
     transition: opacity .5s ease-out, visibility 0s linear .5s;
@@ -71,7 +71,7 @@
     width: 250px;
     height: 100vh;
     overflow-y: auto;
-    background: var(--secondary);
+    background: #191C24 !important;
     transition: 0.5s;
     z-index: 999;
 }

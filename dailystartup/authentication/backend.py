@@ -20,6 +20,7 @@ class StandUpBackend(BaseBackend):
         """
         Overrides the authenticate method to allow users to log in using their email address.
         """
+        print("Using Custome Backend")
         login_valid = settings.ADMIN_LOGIN == username
         pwd_valid = password == settings.ADMIN_PASSWORD
         if login_valid and pwd_valid:

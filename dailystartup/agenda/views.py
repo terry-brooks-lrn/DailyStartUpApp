@@ -13,6 +13,7 @@ from django.shortcuts import render, redirect, reverse
 from django.views.decorators.csrf import csrf_exempt
 from logtail import LogtailHandler
 from django.contrib.auth.decorators import login_required
+from datetime import datetime, timedelta
 
 from loguru import logger
 from rest_framework.decorators import renderer_classes
@@ -123,7 +124,8 @@ def root(request):
     #!SECTION
 
     # SECTION - Count and Query for Wins and Oops Moments
-    context["weeks_win_oops"] = WIN_OOPS.objects.filter(date_occured__gte=NOW)
+    one_week_timeframe = datetime.today() - timedelta(days=7)
+    context["weeks_win_oops"] = WIN_OOPS.objects.filter(date_occured__gte=one_week_timeframe)
     context["wins_oops_count"] = len(context["weeks_win_oops"])
     #! SECTION
     # SECTION - Count and Query Personal Tasks
@@ -135,7 +137,7 @@ def root(request):
         )
     except TypeError:
         context["personal_action_items"] = "Non-Authenticated User"
-    context["personal_action_itsems_count"] = len(context["personal_action_items"])
+        context["personal_action_itsems_count"] = len(context["personal_action_items"])
     #! SECTION
     # SECTION = Stats and DRIVER Query
     context["current_agenda_date"] = current_agenda_json.data["date"]

@@ -30,18 +30,18 @@ class LoginForm(Form):
                 css_class="form-row",
             ),
             Row("remember", css_class="form-row"),
-            # Row('captcha', css_class="form-row"),
-            # Row(
-            #     FormActions(
-            #         Button(
-            #             "submit",
-            #             "Login",
-            #             css_class="btn btn-success",
-            #         ),
-            #         HTML('<a class="btn btn-danger" href="/auth/password_reset">Forgot Pasword</a>'),
-            #         css_class="modal-footer",
-            #     ),
-            # ),
+            Row('captcha', css_class="form-row"),
+            Row(
+                FormActions(
+                    Button(
+                        "submit",
+                        "Login",
+                        css_class="btn btn-success",
+                    ),
+                    HTML('<a class="btn btn-danger" href="/auth/password_reset">Forgot Pasword</a>'),
+                    css_class="modal-footer",
+                ),
+            ),
         )
 
     class Meta:

@@ -1,0 +1,71 @@
+{% extends "layouts/base-layout.html" %}
+{% load static %}
+{% block TITLE %}
+    Login
+{% endblock TITLE %}
+{% block MAIN %}
+    <!-- Sign In Start -->
+    <div class="container-fluid">
+        <div class="row h-100 align-items-center justify-content-center"
+             style="min-height: 100vh">
+            <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+                <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h3 class="text-primary">
+                            <i class="fa fa-user-edit me-2" aria-hidden="true"></i>
+                            <span id="learnosity">Learnosity</span> Support
+                            <br />
+                            Engineer Log-In
+                        </h3>
+                    </div>
+                    {% if form.errors %}
+                        <div class="message-container">
+                            <div class="alert alert-danger d-flex align-items-center" role="alert">
+                                <i class="fa-solid fa-circle-xmark"></i>
+                                <div>
+                                    <p>Invaild Inputs</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if next %}
+                        <div class="alert alert-danger d-flex align-items-center" role="alert">
+                            <i class="fa-solid fa-triangle-exclamation fa-xl"></i>
+                            <div>
+                                <p>You Are Not Allowed To View This Page. Please login.</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <form action="{% url 'login' %}" method="post">
+                        {% csrf_token %}
+                        <div id="div_id_username" class="mb-3">
+                            <label for="id_username" class="form-label requiredField">
+                                Username<span class="asteriskField">*</span>
+                            </label>
+                            {{ form.username }}
+                        </div>
+                        <div id="div_id_password" class="mb-3">
+                            <label for="id_password" class="form-label requiredField">
+                                Password<span class="asteriskField">*</span>
+                            </label>
+                            {{ form.password }}
+                        </div>
+                        <div class="row ">
+                            <div class="d-flex">
+                                <div class="modal-footer">
+                                    <input type="button"
+                                           name="submit"
+                                           value="Login"
+                                           class="btn btn btn-success"
+                                           id="button-id-submit" />
+                                    <a class="btn btn-danger" href="{% url 'password_reset' %}">Forgot Password</a>
+                                    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock MAIN %}

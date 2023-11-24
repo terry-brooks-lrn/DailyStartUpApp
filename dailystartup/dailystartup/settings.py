@@ -58,6 +58,15 @@ INSTALLED_APPS = [
     "corsheaders",
     "debug_toolbar",
     "kolo",
+    "allauth_ui",
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'django_icons',
+    "widget_tweaks",
+
+
     # Installed Internal App
     "agenda",
     "api",
@@ -68,9 +77,7 @@ RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY")
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
-LOGIN_URL = "/login"
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/login"
+
 
 MIDDLEWARE = [
     "kolo.middleware.KoloMiddleware",
@@ -85,13 +92,15 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
+
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 ROOT_URLCONF = "dailystartup.urls"
 TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
-
+STATIC_ROOT = "staticfiles/"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -103,6 +112,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                'django.template.context_processors.request',
+
             ],
         },
     },
@@ -143,11 +154,11 @@ REDIS_URL = os.getenv("REDIS_URI")
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 # !SECTION
-# Password validation
-# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
+# Password validation & User Authentication 
 CSRF_COOKIE_HTTPONLY = False
+LOGIN_URL = "/accounts/login/"
 LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/login"
+LOGOUT_REDIRECT_URL = "/accounts/login/"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
 AUTH_USER_MODEL = "agenda.SupportEngineer"
@@ -174,7 +185,25 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",  # This is the default that allows us to log in via username
     "authentication.backend.StandUpBackend",
+    'allauth.account.auth_backends.AuthenticationBackend',
+
 ]
+# SECTION - AllAuth 
+ACCOUNT_EMAIL_REQUIRED=True
+ACCOUNT_EMAIL_SUBJECT_PREFIX = "Learnosity Support Engineering Portal "
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': os.getenv("GOOGLE_SIGN_IN_CLIENT_ID"),
+            'secret': os.getenv("GOOGLE_SIGN_IN_CLIENT_SECRET"),
+            'key': ''
+        }
+    }
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/

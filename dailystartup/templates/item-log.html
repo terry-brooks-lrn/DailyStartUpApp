@@ -1,71 +1,69 @@
 {% extends "layouts/base-layout.html" %}
 {% load static %}
-{% block TITLE %}Resolved Item Log{% endblock TITLE %}
-
+{% block TITLE %}
+    Resolved Item Log
+{% endblock TITLE %}
 {% include "includes/sidebar.html" %}
 {% include "includes/navbar.html" %}
-
-        <!-- Current Tasks Stats Start  -->
+<!-- Current Tasks Stats Start  -->
 {% include "includes/stats.html" %}
-
-        <!-- Current Tasks Stats Ends -->
-
+<!-- Current Tasks Stats Ends -->
 {% block MAIN %}
     <div id="item-log"
-         <h1>Resolved Item Log</h1>
-    <div class="container-fluid pt-4 px-4">
-        <div class="bg-secondary text-center rounded p-4">
-            <div class="d-flex align-items-center justify-content-between mb-4">
-                <form class="d-none d-md-flex ms-4">
-                    <input class="form-control bg-dark border-0" type="search" placeholder="Search"/>
-                </form>
-                <div class="table-responsive">
-                    <table class="table text-start align-middle table-bordered table-hover mb-0">
-                        <thead>
-                            <tr class="text-white">
-                                <th scope="col"></th>
-                                <th scope="col">Date Added</th>
-                                <th scope="col">Date Resolved</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Section</th>
-                                <th scope="col">Support Engineer</th>
-                                <th scope="col">Title</th>
-                                <th scope="col">Link</th>
-                                <th scope="col">Added to SupportMail?</th>
-                                <th scope="col">SupportMail Edition</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for item in master_item_log %}
-                                <tr>
-                                    <td></td>
-                                    <td>{{ item.date_created }}</td>
-                                    <td>{{ item.date_resolved }}</td>
-                                    <td>{{ item.status }}</td>
-                                    <td>{{ item.section }}</td>
-                                    <td>{{ item.creator }}</td>
-                                    <td>{{ item.title }}</td>
-                                    <td>{{ item.link_to_ticket}}</td>
-                                    <td>{{ item.added_to_supportmail }}</td>
-                                    <td>{{ item.added_to_supportmail }}</td>
-                                    <td><button class="btn btn-sm btn-primary"
-                                                onclick="reopenItem({{ item.id }})">Reopen</button></td>
+        <h1>Resolved Item Log</h1>
+        <div class="container-fluid pt-4 px-4">
+            <div class="bg-secondary text-center rounded p-4">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <form class="d-none d-md-flex ms-4">
+                        <input class="form-control bg-dark border-0"
+                               type="search"
+                               placeholder="Search" />
+                    </form>
+                    <div class="table-responsive">
+                        <table class="table text-start align-middle table-bordered table-hover mb-0">
+                            <thead>
+                                <tr class="text-white">
+                                    <th scope="col"></th>
+                                    <th scope="col">Date Added</th>
+                                    <th scope="col">Date Resolved</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Section</th>
+                                    <th scope="col">Support Engineer</th>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">Link</th>
+                                    <th scope="col">Added to SupportMail?</th>
+                                    <th scope="col">SupportMail Edition</th>
+                                    <th scope="col">Action</th>
                                 </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {% for item in master_item_log %}
+                                    <tr>
+                                        <td></td>
+                                        <td>{{ item.date_created }}</td>
+                                        <td>{{ item.date_resolved }}</td>
+                                        <td>{{ item.status }}</td>
+                                        <td>{{ item.section }}</td>
+                                        <td>{{ item.creator }}</td>
+                                        <td>{{ item.title }}</td>
+                                        <td>{{ item.link_to_ticket }}</td>
+                                        <td>{{ item.added_to_supportmail }}</td>
+                                        <td>{{ item.added_to_supportmail }}</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary" onclick="reopenItem({{ item.id }})">Reopen</button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-{% endblock MAIN %}
-
-{% block CUSTOM_SCRIPTS %}
-{% endblock CUSTOM_SCRIPTS %}
-
+    {% endblock MAIN %}
+    {% block CUSTOM_SCRIPTS %}
+    {% endblock CUSTOM_SCRIPTS %}
     <!-- Footer Start -->
-<div class="container-fluid pt-4 px-4">
-    <div class="bg-secondary rounded-top p-4">
+    <div class="container-fluid pt-4 px-4">
+        <div class="bg-secondary rounded-top p-4"></div>
     </div>
-</div>

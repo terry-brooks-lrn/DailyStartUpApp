@@ -6,8 +6,7 @@
         </div>
         {% if personal_action_items_count > 0 %}
             <div class="table-responsive item-segmentation">
-                <table
-                    class="table text-start align-middle table-bordered table-hover mb-0">
+                <table class="table text-start align-middle table-bordered table-hover mb-0">
                     <thead>
                         <tr class="text-white">
                             <th scope="col">Action Item</th>
@@ -18,7 +17,7 @@
                     <tbody>
                         {% for item in personal_action_items %}
                             <tr>
-                                <td>{{item.next_task_needed_to_resolve}}</td>
+                                <td>{{ item.next_task_needed_to_resolve }}</td>
                                 <td>{{ item.title }}</td>
                                 <td>{{ item.next_task_due_date }}</td>
                             </tr>
@@ -28,8 +27,10 @@
             </div>
         {% else %}
             <div class="row no-items">
-                <div class="no-work-copy"> Nothing to See Here! How about a Quick
-                    Laugh? 🤣</div>
+                <div class="no-work-copy">
+                    Nothing to See Here! How about a Quick
+                    Laugh? 🤣
+                </div>
                 <h3 id="joke" class="col-12 yo-mama-joke"></h3>
             </div>
         {% endif %}

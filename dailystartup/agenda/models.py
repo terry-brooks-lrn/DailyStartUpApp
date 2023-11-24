@@ -40,10 +40,10 @@ class SupportEngineerManager(BaseUserManager):
         """
         Create and save a user with the given email and password.
         """
-        if not email:
+        if email is None or email == " ":
             raise ValueError(_("The Email must be set"))
         email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
+        user = self.model(username=username, email=email, **extra_fields)
         user.set_password(password)
         user.save()
         return user
@@ -60,7 +60,7 @@ class SupportEngineerManager(BaseUserManager):
             raise ValueError(_("Superuser must have is_staff=True."))
         if extra_fields.get("is_superuser") is not True:
             raise ValueError(_("Superuser must have is_superuser=True."))
-        return self.create_user(email, username, password, **extra_fields)
+        return self.create_user(**extra_fields, email=email, username=username, password=password)
 
 
 class SupportEngineer(AbstractUser):
